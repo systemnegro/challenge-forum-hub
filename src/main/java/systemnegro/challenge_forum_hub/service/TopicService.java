@@ -15,12 +15,12 @@ public class TopicService {
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
 
-    public Topic createTopic(CreateTopicDTO topicDTO) {
+    public Topic createTopic(CreateTopicDTO topicDTO, Long userId) {
         if (topicRepository.existsByTitleAndMessage(topicDTO.title(), topicDTO.message())) {
             throw new DuplicateTopicException();
         }
-        var author = userRepository.findByEmail(topicDTO.authorEmail())
-                .orElseThrow(EntityNotFoundException::new);
+        var author = userRepository.getReferenceById(userId);
+
 
         Topic topic = new Topic(topicDTO, author);
 
