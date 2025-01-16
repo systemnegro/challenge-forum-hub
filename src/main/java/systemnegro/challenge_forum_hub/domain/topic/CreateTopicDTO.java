@@ -8,7 +8,5 @@ public record CreateTopicDTO(
         @NotBlank
         String title,
         @NotBlank
-        String message,
-        @NotBlank
-        String authorEmail) {
+        String message) {
 }
