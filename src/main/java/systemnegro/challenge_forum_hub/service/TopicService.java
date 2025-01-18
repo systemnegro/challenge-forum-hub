@@ -35,6 +35,7 @@ public class TopicService {
         return topicRepository.findAllByActiveTrue(pageable).map(TopicDetailsDTO::new);
     }
 
+    //TODO verificar se o usuario que quer atualizar ou apagar um topico é o dono do mesmo
     public Topic updateTopic(Long id, UpdateTopicDTO updateTopicDTO) {
         if (topicRepository.existsByTitleAndMessage(updateTopicDTO.title(), updateTopicDTO.message())) {
             throw new DuplicateTopicException();
