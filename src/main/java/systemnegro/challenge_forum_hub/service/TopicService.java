@@ -4,8 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import systemnegro.challenge_forum_hub.domain.topic.*;
+import systemnegro.challenge_forum_hub.domain.user.User;
 import systemnegro.challenge_forum_hub.domain.user.UserRepository;
 import systemnegro.challenge_forum_hub.infra.exception.DuplicateTopicException;
 
@@ -15,12 +19,14 @@ public class TopicService {
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
 
-    public Topic createTopic(CreateTopicDTO topicDTO, Long userId) {
+    public Topic createTopic(CreateTopicDTO topicDTO) {
         if (topicRepository.existsByTitleAndMessage(topicDTO.title(), topicDTO.message())) {
             throw new DuplicateTopicException();
         }
-        var author = userRepository.getReferenceById(userId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
 
+        var author = userRepository.getReferenceById(user.getId());
 
         Topic topic = new Topic(topicDTO, author);
 
@@ -35,12 +41,12 @@ public class TopicService {
         return topicRepository.findAllByActiveTrue(pageable).map(TopicDetailsDTO::new);
     }
 
-    //TODO verificar se o usuario que quer atualizar ou apagar um topico é o dono do mesmo
     public Topic updateTopic(Long id, UpdateTopicDTO updateTopicDTO) {
         if (topicRepository.existsByTitleAndMessage(updateTopicDTO.title(), updateTopicDTO.message())) {
             throw new DuplicateTopicException();
         }
         var topic = topicRepository.getReferenceById(id);
+        verifyUser(topic.getAuthor().getId());
         topic.update(updateTopicDTO);
         return topic;
     }
@@ -50,6 +56,15 @@ public class TopicService {
         if (topic.isEmpty()) {
             throw new EntityNotFoundException();
         }
+        verifyUser(topic.get().getAuthor().getId());
         topicRepository.deleteById(id);
+    }
+
+    private void verifyUser(Long authorID) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        if (!user.getId().equals(authorID)) {
+            throw new AccessDeniedException("Você não tem permissão para alterar ou excluir este tópico.");
+        }
     }
 }

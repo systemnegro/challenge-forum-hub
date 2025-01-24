@@ -29,12 +29,7 @@ public class TopicController {
     @PostMapping
     @Transactional
     public ResponseEntity<TopicDetailsDTO> create(@RequestBody @Valid CreateTopicDTO topicDTO, UriComponentsBuilder uriBuilder) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        Long userId = user.getId();
-
-        var topic = service.createTopic(topicDTO,userId);
+        var topic = service.createTopic(topicDTO);
         var uri = uriBuilder.path("topicos/{id}").buildAndExpand(topic.getId()).toUri();
         return ResponseEntity.created(uri).body(new TopicDetailsDTO(topic));
     }
@@ -42,14 +37,12 @@ public class TopicController {
     @GetMapping
     public ResponseEntity<Page<TopicDetailsDTO>> listTopics(@PageableDefault Pageable pageable) {
         var page = service.listTopics(pageable);
-
         return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TopicDetailsDTO> getTopic(@PathVariable Long id) {
         var topic = service.getTopic(id);
-
         return ResponseEntity.ok(new TopicDetailsDTO(topic));
     }
 
