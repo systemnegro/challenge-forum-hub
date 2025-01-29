@@ -27,6 +27,12 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
+    public User(UserRegisterDTO registerDTO, String encodedPassword) {
+        this.name = registerDTO.name();
+        this.email = registerDTO.email();
+        this.password = encodedPassword;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
