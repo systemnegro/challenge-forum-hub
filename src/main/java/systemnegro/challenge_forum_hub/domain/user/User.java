@@ -48,4 +48,9 @@ public class User implements UserDetails {
     public String getPassword() {
         return password;
     }
+
+    public void update(UpdateUserDTO updateUserDTO) {
+        if (updateUserDTO.name() != null) this.name = updateUserDTO.name();
+        if (updateUserDTO.password() != null) this.password = updateUserDTO.password();
+    }
 }

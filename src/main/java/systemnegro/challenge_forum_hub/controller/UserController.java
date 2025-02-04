@@ -4,11 +4,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import systemnegro.challenge_forum_hub.domain.user.UpdateUserDTO;
 import systemnegro.challenge_forum_hub.domain.user.UserDetailsDTO;
 import systemnegro.challenge_forum_hub.domain.user.UserRegisterDTO;
 import systemnegro.challenge_forum_hub.service.UserService;
@@ -25,5 +23,25 @@ public class UserController {
         var user = service.register(registerDTO);
         var uri = uriBuilder.path("/usuarios{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(new UserDetailsDTO(user));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDetailsDTO> getUser(@PathVariable Long id) {
+        var user = service.getUser(id);
+        return ResponseEntity.ok(new UserDetailsDTO(user));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<UserDetailsDTO> update(@RequestBody UpdateUserDTO updateUserDTO, @PathVariable Long id) {
+        var updatedUser = service.updateUser(updateUserDTO, id);
+        return ResponseEntity.ok(new UserDetailsDTO(updatedUser));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
