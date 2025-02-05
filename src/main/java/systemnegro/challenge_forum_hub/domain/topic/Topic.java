@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import systemnegro.challenge_forum_hub.domain.response.Response;
 import systemnegro.challenge_forum_hub.domain.user.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "topicos")
@@ -27,6 +29,9 @@ public class Topic {
 
     @ManyToOne(optional = false)
     private User author;
+
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.REMOVE)
+    private List<Response> responses;
 
 
     public Topic(CreateTopicDTO topicDTO, User author) {
