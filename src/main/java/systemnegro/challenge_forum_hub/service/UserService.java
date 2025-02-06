@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import systemnegro.challenge_forum_hub.domain.user.UpdateUserDTO;
 import systemnegro.challenge_forum_hub.domain.user.User;
 import systemnegro.challenge_forum_hub.domain.user.UserRegisterDTO;
@@ -19,6 +20,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
 
+    @Transactional
     public User register(UserRegisterDTO registerDTO) {
         if (repository.existsByEmail(registerDTO.email())) {
             throw new UserAlreadyExistsException();
@@ -31,14 +33,14 @@ public class UserService {
     public User getUser(Long id) {
         return repository.getReferenceById(id);
     }
-
+    @Transactional
     public User updateUser(UpdateUserDTO updateUserDTO, Long id) {
         var user = repository.getReferenceById(id);
         verifyUser(id);
         user.update(updateUserDTO);
         return user;
     }
-
+    @Transactional
     public void deleteUser(Long id) {
         repository.getReferenceById(id);
         verifyUser(id);

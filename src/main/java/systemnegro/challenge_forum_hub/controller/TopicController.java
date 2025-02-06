@@ -27,7 +27,6 @@ public class TopicController {
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<TopicDetailsDTO> create(@RequestBody @Valid CreateTopicDTO topicDTO, UriComponentsBuilder uriBuilder) {
         var topic = service.createTopic(topicDTO);
         var uri = uriBuilder.path("topicos/{id}").buildAndExpand(topic.getId()).toUri();
@@ -47,13 +46,12 @@ public class TopicController {
     }
 
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<TopicDetailsDTO> updateTopic(@RequestBody UpdateTopicDTO updateTopicDTO, @PathVariable Long id) {
         var updatedTopic = service.updateTopic(id, updateTopicDTO);
         return ResponseEntity.ok(new TopicDetailsDTO(updatedTopic));
     }
+
     @DeleteMapping("/{id}")
-    @Transactional
     public ResponseEntity<Void> deleteTopic(@PathVariable Long id){
         service.deleteTopic(id);
         return ResponseEntity.noContent().build();

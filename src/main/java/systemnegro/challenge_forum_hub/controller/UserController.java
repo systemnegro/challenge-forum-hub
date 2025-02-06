@@ -18,7 +18,6 @@ public class UserController {
     private final UserService service;
 
     @PostMapping("/cadastro")
-    @Transactional
     public ResponseEntity<UserDetailsDTO> register(@RequestBody @Valid UserRegisterDTO registerDTO, UriComponentsBuilder uriBuilder) {
         var user = service.register(registerDTO);
         var uri = uriBuilder.path("/usuarios{id}").buildAndExpand(user.getId()).toUri();
@@ -32,14 +31,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<UserDetailsDTO> update(@RequestBody UpdateUserDTO updateUserDTO, @PathVariable Long id) {
         var updatedUser = service.updateUser(updateUserDTO, id);
         return ResponseEntity.ok(new UserDetailsDTO(updatedUser));
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.deleteUser(id);
         return ResponseEntity.noContent().build();

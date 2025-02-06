@@ -1,5 +1,6 @@
 package systemnegro.challenge_forum_hub.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ public class TopicService {
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public Topic createTopic(CreateTopicDTO topicDTO) {
         if (topicRepository.existsByTitleAndMessage(topicDTO.title(), topicDTO.message())) {
             throw new DuplicateTopicException();
@@ -41,6 +43,7 @@ public class TopicService {
         return topicRepository.findAllByActiveTrue(pageable).map(TopicDetailsDTO::new);
     }
 
+    @Transactional
     public Topic updateTopic(Long id, UpdateTopicDTO updateTopicDTO) {
         if (topicRepository.existsByTitleAndMessage(updateTopicDTO.title(), updateTopicDTO.message())) {
             throw new DuplicateTopicException();
@@ -51,6 +54,7 @@ public class TopicService {
         return topic;
     }
 
+    @Transactional
     public void deleteTopic(Long id) {
         var topic = topicRepository.findById(id);
         if (topic.isEmpty()) {
