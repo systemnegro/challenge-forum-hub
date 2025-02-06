@@ -5,15 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import systemnegro.challenge_forum_hub.domain.topic.CreateTopicDTO;
 import systemnegro.challenge_forum_hub.domain.topic.TopicDetailsDTO;
 import systemnegro.challenge_forum_hub.domain.topic.UpdateTopicDTO;
-import systemnegro.challenge_forum_hub.domain.user.User;
 import systemnegro.challenge_forum_hub.service.TopicService;
 
 

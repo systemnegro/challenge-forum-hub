@@ -3,7 +3,6 @@ package systemnegro.challenge_forum_hub.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import systemnegro.challenge_forum_hub.domain.user.UpdateUserDTO;

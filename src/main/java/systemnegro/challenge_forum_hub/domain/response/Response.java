@@ -31,4 +31,11 @@ public class Response {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User author;
 
+    public Response(User author, CreateResponseDTO createResponseDTO, Topic topic) {
+        this.createdAt = LocalDateTime.now();
+        this.author = author;
+        this.message = createResponseDTO.message();
+        this.topic = topic;
+        this.solution = false;
+    }
 }
