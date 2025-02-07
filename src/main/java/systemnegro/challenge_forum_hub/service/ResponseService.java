@@ -1,5 +1,6 @@
 package systemnegro.challenge_forum_hub.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,7 @@ public class ResponseService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         var author = userRepository.getReferenceById(user.getId());
-        var topic = topicRepository.getReferenceById(createResponseDTO.TopicID());
+        var topic = topicRepository.findById(createResponseDTO.TopicID()).orElseThrow(EntityNotFoundException::new);
 
         Response response = new Response(author, createResponseDTO, topic);
 
