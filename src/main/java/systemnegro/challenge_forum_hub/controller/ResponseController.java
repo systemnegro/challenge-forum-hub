@@ -1,5 +1,6 @@
 package systemnegro.challenge_forum_hub.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import systemnegro.challenge_forum_hub.service.ResponseService;
 @RestController
 @RequestMapping("/respostas")
 @AllArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class ResponseController {
     private final ResponseService service;
 

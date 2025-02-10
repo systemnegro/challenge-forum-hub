@@ -1,5 +1,6 @@
 package systemnegro.challenge_forum_hub.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import systemnegro.challenge_forum_hub.service.TopicService;
 
 @RestController
 @RequestMapping("/topicos")
+@SecurityRequirement(name = "bearer-key")
 public class TopicController {
     private final TopicService service;
 
