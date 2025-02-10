@@ -38,4 +38,9 @@ public class Response {
         this.topic = topic;
         this.solution = false;
     }
+
+    public void update(UpdateResponseDTO updateResponseDTO) {
+        this.message = updateResponseDTO.message();
+
+    }
 }
